@@ -1,19 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Chunk_generator.hpp                                :+:      :+:    :+:   */
+/*   Map_manager.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: trobicho <trobicho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/15 06:47:15 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/15 08:24:00 by trobicho         ###   ########.fr       */
+/*   Created: 2021/11/16 07:57:43 by trobicho          #+#    #+#             */
+/*   Updated: 2021/11/19 00:14:04 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-class	Chunk_generator
-{
-	public:
-		virtual	Chunk_generator() = 0;
+#include "Map_manager.hpp"
 
-		virtual	void	generate_chunk();
+Map_manager::Map_manager() : m_vdb(m_map_node)
+{
+}
+
+Map_manager::~Map_manager()
+{
+}
+
+void	Map_manager::init()
+{
+	m_map_node = Internal_L1(0, 0, 0);
+	m_chunk_manager.lunch();
+	m_state = MAP_MANAGER_STATE_GENERATING;
+}
+
+void	Map_manager::lunch()
+{
 }

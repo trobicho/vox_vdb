@@ -6,13 +6,22 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 06:38:12 by trobicho          #+#    #+#             */
-/*   Updated: 2019/12/24 19:58:41 by trobicho         ###   ########.fr       */
+/*   Updated: 2021/11/18 23:58:34 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "Mesh_interface.h"
+//#include "Mesh_interface.h"
+
+struct	s_vec3i
+{
+	s_vec3i(){}
+	s_vec3i(int xa, int ya, int za) : x(xa), y(xa), z(xa){};
+	int	x;
+	int	y;
+	int	z;
+};
 
 struct	s_vbox
 {
@@ -55,9 +64,6 @@ class	Node
 		{
 			return (do_pruning());
 		}
-		inline void			mesh(Mesh_interface &mesh) const {do_mesh(mesh);}
-		inline void			mesh(Mesh_interface &mesh, const s_vbox &box) const
-								{do_mesh(mesh, box);}
 
 	private:
 		virtual bool		do_is_leaf() const = 0;
@@ -72,7 +78,5 @@ class	Node
 								, uint32_t slog) = 0;
 		virtual const Node<Value>
 							*do_get_interresting_node(s_vec3i v, Value &value) const = 0;
-		virtual void		do_mesh(Mesh_interface &mesh) const = 0;
-		virtual void		do_mesh(Mesh_interface &mesh, const s_vbox &box) const = 0;
 		virtual Value		do_pruning() = 0;
 };

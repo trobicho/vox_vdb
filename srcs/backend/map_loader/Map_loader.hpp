@@ -1,37 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   Map_loader.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: trobicho <trobicho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/15 06:25:54 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/17 14:29:22 by trobicho         ###   ########.fr       */
+/*   Created: 2021/11/17 14:35:28 by trobicho          #+#    #+#             */
+/*   Updated: 2021/11/19 09:43:10 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#pragma once
+
+#include <thread>
+#include <mutex>
+#include <glm/glm.hpp>
 #include "backend/map_manager/Map_manager.hpp"
-#include "GLFW/glfw3.h"
 
-static void	main_loop(GLFWwindow *win)
+#define		CHUNK_LOG_X	(4)
+#define		CHUNK_LOG_Y	(8)
+#define		CHUNK_LOG_Z	(4)
+
+class	Map_loader
 {
-	while(!glfwWindowShouldClose(win))
-	{
-		glfwPollEvents();
-	}
-}
+	public:
+		Map_loader(Chunk_map &chunk_map): m_chunk_map(chunk_map){};
+		~Map_loader(){};
 
-int	main(int ac, char **av)
-{
-	Map_manager			map_manager;
+		int			search_new_chunk(glm::vec3 player_pos);
 
-	glfwInit();
-	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-	GLFWwindow *win = glfwCreateWindow(800, 600, "Vox_vdb"
-		, glfwGetPrimaryMonitor(), NULL);
-	map_manager.init();
-	map_manager.lunch();
+	private:
+		int			next_chunk_in_radius(s_vec3i center, s_vec3i &pos, int radius);
 
-	return (EXIT_SUCCESS);
-}
+		ChunkMap	m_chunk_map;
+};

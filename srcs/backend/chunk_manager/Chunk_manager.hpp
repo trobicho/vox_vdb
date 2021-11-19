@@ -6,15 +6,23 @@
 /*   By: trobicho <trobicho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 06:32:34 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/16 06:06:42 by trobicho         ###   ########.fr       */
+/*   Updated: 2021/11/18 23:38:34 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "back_end/vdb_tree/Vdb_test.h"
-#include "back_end/utils.hpp"
+#pragma once
+
+#include "backend/vdb_tree/Vdb_test.h"
+#include "backend/utils.hpp"
 
 #include <vector>
 #include <list>
+
+#define	CHUNK_MANAGER_STATE_WORKING			0x0001
+#define	CHUNK_MANAGER_STATE_GENERATING	0x0002
+#define CHUNK_MANAGER_STATE_MESHING			0x0004
+
+#define CHUNK_MANAGER_STATE_FULL_WORK		0x0007
 
 #define	CHUNK_UPDATE_EVENT_MESH					0x0001
 #define	CHUNK_UPDATE_EVENT_GENERATE			0x0002
@@ -24,12 +32,12 @@
 
 struct	s_chunk_update_event
 {
-	gml::ivec3	pos;
+	s_vec3i			pos;
 	uint32_t		new_block_type;
 	uint32_t		flags;
 };
 
-struct	s_state_type
+struct	s_stats_type
 {
 	uint32_t	nb_chunk_generated = 0;
 	uint32_t	nb_chunk_meshed = 0;
@@ -38,20 +46,20 @@ struct	s_state_type
 class	Chunk_manager
 {
 	public:
-		Chunk_mamager(int nb_thread = 20);
-		~Chunk_mamager();
+		Chunk_manager(int nb_thread = 20);
+		~Chunk_manager();
 
+		void		lunch();
+		void		manager();
 		void		quit() {m_quit = true;}
 
 	private:
 		bool								m_quit = false;
-		Chunk_generator			&m_mapper;
-
-		t_chunk_map					m_chunk_map;
+		//Chunk_generator			&m_mapper;
 
 		std::thread					m_manager_thread;
-		utils::thread_safe::event_list<s_chunk_update_event>		m_chunk_update_list;
-		std::vector<utils::thread::thread_wrapper<stats_type>>	m_thread_buffer;
+		utils::thread::event_list<s_chunk_update_event>					m_chunk_update_list;
+		std::vector<utils::thread::thread_wrapper<s_stats_type>>	m_thread_buffer;
 		int									m_nb_thread;
-		glm::vec3						m_player_pos
+		uint32_t						m_state;
 };
