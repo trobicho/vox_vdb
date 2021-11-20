@@ -1,21 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Chunk_generator.hpp                                :+:      :+:    :+:   */
+/*   Chunk.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: trobicho <trobicho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/15 06:47:15 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/19 16:29:07 by trobicho         ###   ########.fr       */
+/*   Created: 2021/11/16 06:05:04 by trobicho          #+#    #+#             */
+/*   Updated: 2021/11/19 16:02:22 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-class	Chunk_generator
+#include "backend/vdb_tree/Vdb_test.h"
+
+class	Chunk
 {
 	public:
-		virtual	Chunk_generator() = 0;
+		Chunk(){};
+		Chunk(s_vec3i a_origin): origin(a_origin){};
+		~Chunk(){};
 
-		virtual	void	generate_chunk() = 0;
-}
+		s_vec3i		origin;
+		bool			need_remesh = false;
+		bool			need_unload = false;
+};

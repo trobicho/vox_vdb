@@ -6,14 +6,17 @@
 /*   By: trobicho <trobicho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 07:57:43 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/19 00:14:04 by trobicho         ###   ########.fr       */
+/*   Updated: 2021/11/20 13:32:54 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Map_manager.hpp"
+#include <chrono>
 
-Map_manager::Map_manager() : m_vdb(m_map_node)
+Map_manager::Map_manager() : m_map_node(0, 0, 0)
+	, m_vdb(m_map_node), m_map_loader(m_chunk_map)
 {
+	m_map_loader.set_chunk_event_list(&m_chunk_manager.get_chunk_event_list());
 }
 
 Map_manager::~Map_manager()
@@ -29,4 +32,12 @@ void	Map_manager::init()
 
 void	Map_manager::lunch()
 {
+	m_state |= MAP_MANAGER_STATE_WORKING;
+	glm::vec3		player_pos(1500.0f, 0.0f, 1500.0f);
+	while (m_state != MAP_MANAGER_STATE_QUITING)
+	{
+		m_map_loader.search_new_chunk(player_pos);
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+	}
+	m_chunk_manager.quit();
 }

@@ -6,7 +6,7 @@
 /*   By: trobicho <trobicho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 06:32:34 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/18 23:38:34 by trobicho         ###   ########.fr       */
+/*   Updated: 2021/11/19 15:45:32 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 #include "backend/vdb_tree/Vdb_test.h"
 #include "backend/utils.hpp"
+#include "backend/chunk_map/Chunk.hpp"
 
 #include <vector>
 #include <list>
@@ -32,9 +33,13 @@
 
 struct	s_chunk_update_event
 {
+	s_chunk_update_event(){};
+	s_chunk_update_event(s_vec3i a_pos, Chunk* a_chunk, uint32_t a_flags):
+		pos(a_pos), chunk(a_chunk), flags(a_flags){};
 	s_vec3i			pos;
-	uint32_t		new_block_type;
+	Chunk				*chunk;
 	uint32_t		flags;
+	uint32_t		new_block_type;
 };
 
 struct	s_stats_type
@@ -42,6 +47,9 @@ struct	s_stats_type
 	uint32_t	nb_chunk_generated = 0;
 	uint32_t	nb_chunk_meshed = 0;
 };
+
+using s_chunk_event_list = utils::thread::event_list<s_chunk_update_event>;
+using s_stats_thread = utils::thread::thread_wrapper<s_stats_type>;
 
 class	Chunk_manager
 {
@@ -51,15 +59,20 @@ class	Chunk_manager
 
 		void		lunch();
 		void		manager();
+		s_chunk_event_list&
+						get_chunk_event_list(){return (m_chunk_event_list);}
 		void		quit() {m_quit = true;}
 
 	private:
+		void		thread_chunk_event();
+
 		bool								m_quit = false;
 		//Chunk_generator			&m_mapper;
 
 		std::thread					m_manager_thread;
-		utils::thread::event_list<s_chunk_update_event>					m_chunk_update_list;
-		std::vector<utils::thread::thread_wrapper<s_stats_type>>	m_thread_buffer;
+		s_chunk_event_list	m_chunk_event_list;
+		std::vector<s_stats_thread>
+												m_thread_buffer;
 		int									m_nb_thread;
 		uint32_t						m_state;
 };

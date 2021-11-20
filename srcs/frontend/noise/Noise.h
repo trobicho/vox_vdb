@@ -1,21 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Chunk_generator.hpp                                :+:      :+:    :+:   */
+/*   Noise.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: trobicho <trobicho@student.42.fr>          +#+  +:+       +#+        */
+/*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/15 06:47:15 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/19 16:29:07 by trobicho         ###   ########.fr       */
+/*   Created: 2019/11/28 13:35:25 by trobicho          #+#    #+#             */
+/*   Updated: 2021/11/20 08:24:55 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-class	Chunk_generator
+class	Noise
 {
 	public:
-		virtual	Chunk_generator() = 0;
+		Noise(){};
+		~Noise(){};
 
-		virtual	void	generate_chunk() = 0;
-}
+		static double		lerp(double a, double b, double t);
+		double					smooth_noise2d(double x_pos, double y_pos);
+		double					smooth_noise3d(double x_pos, double y_pos, double z_pos);
+		void						shuffle();
+};

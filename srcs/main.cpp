@@ -6,7 +6,7 @@
 /*   By: trobicho <trobicho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 06:25:54 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/17 14:29:22 by trobicho         ###   ########.fr       */
+/*   Updated: 2021/11/19 14:58:20 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,12 @@ int	main(int ac, char **av)
 
 	glfwInit();
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+	glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 	GLFWwindow *win = glfwCreateWindow(800, 600, "Vox_vdb"
-		, glfwGetPrimaryMonitor(), NULL);
+		, NULL, NULL);
 	map_manager.init();
 	map_manager.lunch();
+	main_loop(win);
 
 	return (EXIT_SUCCESS);
 }

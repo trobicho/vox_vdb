@@ -6,7 +6,7 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 21:06:37 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/16 09:44:40 by trobicho         ###   ########.fr       */
+/*   Updated: 2021/11/19 15:02:41 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 using	Leaf = Leaf_node<uint32_t, 2>;
 using	Chunk_part_node = Internal_node<uint32_t, Leaf, 2, 2, 2>;
-using	Chunk_node = Internal_node<uint32_t, Leaf, 0, 3, 0>;
+using	Chunk_node = Internal_node<uint32_t, Leaf, 0, 4, 0>;
 using	Internal_L2 = Internal_node<uint32_t, Chunk_node , 8, 1, 8>;
 using	Internal_L1 = Internal_node<uint32_t, Internal_L2, 8, 1, 8>;
 using	Node_v = Node<uint32_t>;

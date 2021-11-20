@@ -1,24 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Chunk.hpp                                          :+:      :+:    :+:   */
+/*   vec.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: trobicho <trobicho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/16 06:05:04 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/17 14:12:04 by trobicho         ###   ########.fr       */
+/*   Created: 2021/11/20 08:00:59 by trobicho          #+#    #+#             */
+/*   Updated: 2021/11/20 12:49:28 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-class	Chunk
-{
-	public:
-		Chunk(){};
-		~Chunk(){};
+#include <glm/glm.hpp>
 
-		s_vec3i		origin;
-		bool			need_remesh = false;
-		bool			need_unload = false;
+struct	s_vec3i
+{
+	s_vec3i(){}
+	s_vec3i(int xa, int ya, int za) : x(xa), y(ya), z(za){};
+
+	glm::vec3	glm_vec3f(){return (glm::vec3((float)x, (float)y, (float)z));}
+	int	x;
+	int	y;
+	int	z;
 };

@@ -6,22 +6,14 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/04 06:38:12 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/18 23:58:34 by trobicho         ###   ########.fr       */
+/*   Updated: 2021/11/20 08:01:58 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 //#include "Mesh_interface.h"
-
-struct	s_vec3i
-{
-	s_vec3i(){}
-	s_vec3i(int xa, int ya, int za) : x(xa), y(xa), z(xa){};
-	int	x;
-	int	y;
-	int	z;
-};
+#include "backend/vec.hpp"
 
 struct	s_vbox
 {

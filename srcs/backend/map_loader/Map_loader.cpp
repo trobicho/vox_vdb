@@ -6,7 +6,7 @@
 /*   By: trobicho <trobicho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/17 14:35:33 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/19 09:39:57 by trobicho         ###   ########.fr       */
+/*   Updated: 2021/11/19 16:06:06 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,33 +20,39 @@ static uint32_t	taxicab_chunk_dist(s_vec3i chunkA, s_vec3i chunkB)
 	return (dx + dz);
 }
 
-
 int		Map_loader::search_new_chunk(glm::vec3 player_pos)
 {
-	glm::ivec2	i_pos = glm::ivec3((int)player_pos.x
+	s_vec3i		i_pos = s_vec3i((int)player_pos.x
 		, (int)player_pos.y, (int)player_pos.z);
-	glm::ivec3 	pos = i_pos;
+	s_vec3i 	pos = i_pos;
 	int			update = 0;
 
-	auto chunk = m_chunk.find(
-			std::make_pair((pos.x >> CHUNK_LOG_X) << CHUNK_LOG_X
-					, (pos.z >> CHUNK_LOG_Z) << CHUNK_LOG_Z));
-	if (chunk == m_chunk.end())
-		update += load_pos(pos);
-	while (next_chunk_in_radius(i_pos, pos, m_meshing_radius) && !m_update)
+	do
 	{
-		auto chunk = m_chunk.find(
-				std::make_pair((pos.x >> CHUNK_LOG_X) << CHUNK_LOG_X
-					, (pos.z >> CHUNK_LOG_Z) << CHUNK_LOG_Z));
-		if (chunk == m_chunk.end())
+		s_vec3i	chunk_pos(
+			(pos.x >> CHUNK_LOG_X) << CHUNK_LOG_X
+			, 0
+			, (pos.z >> CHUNK_LOG_Z) << CHUNK_LOG_Z
+		);
+		auto chunk = m_chunk_map.find(std::make_pair(chunk_pos.x, chunk_pos.z));
+		if (chunk == m_chunk_map.end())
 		{
-			std::lock_guard<std::mutex> guard(m_list_mutex);
-			m_chunk_update_list.push_back(pos);
+			m_chunk_map.insert({std::make_pair(chunk_pos.x, chunk_pos.z)
+				, Chunk(chunk_pos)
+			});
+			std::cout << "chunk_in_radius: {" 
+				<< pos.x << ", " << pos.z << "}" << std::endl;
+			m_chunk_event_list->push(s_chunk_update_event(
+				pos
+				, &chunk->second
+				, CHUNK_UPDATE_EVENT_GENERATE
+			));
 			update++;
 		}
 		if (update > 100)
 			break;
-	}
+	}while (next_chunk_in_radius(i_pos, pos, m_radius_generate) && !m_update);
+	m_update = false;
 	return (update);
 }
 
