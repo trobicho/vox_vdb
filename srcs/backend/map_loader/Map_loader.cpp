@@ -6,7 +6,7 @@
 /*   By: trobicho <trobicho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/17 14:35:33 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/19 16:06:06 by trobicho         ###   ########.fr       */
+/*   Updated: 2021/11/22 12:18:54 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,17 @@ int		Map_loader::search_new_chunk(glm::vec3 player_pos)
 		auto chunk = m_chunk_map.find(std::make_pair(chunk_pos.x, chunk_pos.z));
 		if (chunk == m_chunk_map.end())
 		{
+			Generate_node &root_node = dynamic_cast<Generate_node&>(m_vdb.get_root_node());
+			Generate_node *chunk_node = root_node.init_chunk_generation(chunk_pos);
 			m_chunk_map.insert({std::make_pair(chunk_pos.x, chunk_pos.z)
-				, Chunk(chunk_pos)
+				, Chunk(chunk_pos, chunk_node)
 			});
+			auto new_chunk = m_chunk_map.find(std::make_pair(chunk_pos.x, chunk_pos.z));
 			std::cout << "chunk_in_radius: {" 
 				<< pos.x << ", " << pos.z << "}" << std::endl;
 			m_chunk_event_list->push(s_chunk_update_event(
 				pos
-				, &chunk->second
+				, &new_chunk->second
 				, CHUNK_UPDATE_EVENT_GENERATE
 			));
 			update++;

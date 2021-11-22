@@ -6,7 +6,7 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 20:38:57 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/17 15:02:09 by trobicho         ###   ########.fr       */
+/*   Updated: 2021/11/22 10:25:02 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,16 @@ class Leaf_node: public Node<Value>
 		static const int sSize = 1 << (Log2X + Log2Y + Log2Z);
 		static const int sLog2X = Log2X, sLog2Y = Log2Y, sLog2Z = Log2Z;
 
-	private:
+	protected:
+		inline unsigned int	get_leaf_offset(int x, int y, int z) const
+		{
+			return ( 
+				((x & (1 << sLog2X) - 1) << (Log2Z + Log2Y))
+					+ ((z & (1 << sLog2Y) - 1) << Log2Y) 
+					+ (y & (1 << sLog2Y) - 1)
+			);
+		}
+
 		inline bool			do_is_leaf() const {
 			return (true);
 		}
@@ -91,8 +100,7 @@ template <class Value, int Log2X, int Log2Y, int Log2Z>
 void	Leaf_node<Value, Log2X, Log2Y, Log2Z>
 		::do_set_vox(Value value, int32_t x, int32_t y, int32_t z)
 {
-	unsigned int	leaf_offset = ((x & (1 << sLog2X)-1) << (Log2Y + Log2Z))
-		+ ((y & (1 << sLog2Y)-1) << Log2Z) + (z & (1 << sLog2Z) - 1);
+	unsigned int	leaf_offset = get_leaf_offset(x, y, z);
 
 	m_leaf_data[leaf_offset] = value;
 	m_value_mask.set(leaf_offset);
@@ -102,8 +110,7 @@ template <class Value, int Log2X, int Log2Y, int Log2Z>
 void	Leaf_node<Value, Log2X, Log2Y, Log2Z>
 		::do_unset_vox(int32_t x, int32_t y, int32_t z)
 {
-	unsigned int	leaf_offset = ((x & (1 << sLog2X)-1) << (Log2Y + Log2Z))
-		+ ((y & (1 << sLog2Y)-1) << Log2Z) + (z & (1 << sLog2Z) - 1);
+	unsigned int	leaf_offset = get_leaf_offset(x, y, z);
 
 	m_leaf_data[leaf_offset] = 0;
 	m_value_mask.reset(leaf_offset);
@@ -113,8 +120,7 @@ template <class Value, int Log2X, int Log2Y, int Log2Z>
 Value	Leaf_node<Value, Log2X, Log2Y, Log2Z>
 		::do_get_vox(int32_t x, int32_t y, int32_t z) const
 {
-	unsigned int	leaf_offset = ((x & (1 << sLog2X)-1) << (Log2Y + Log2Z))
-		+ ((y & (1 << sLog2Y)-1) << Log2Z) + (z & (1 << sLog2Z) - 1);
+	unsigned int	leaf_offset = get_leaf_offset(x, y, z);
 
 	if (m_value_mask[leaf_offset])
 		return (m_leaf_data[leaf_offset]);
@@ -130,10 +136,7 @@ int		Leaf_node<Value, Log2X, Log2Y, Log2Z>
 		m_value_mask.reset();
 		return (sLog2X);
 	}
-	unsigned int	leaf_offset =
-		((node_pos.x & (1 << sLog2X) - 1) << (Log2Y + Log2Z))
-		+ ((node_pos.y & (1 << sLog2Y) - 1) << Log2Z)
-		+ (node_pos.z & (1 << sLog2Z) - 1);
+	unsigned int	leaf_offset = get_leaf_offset(node_pos.x, node_pos.y, node_pos.z);
 
 	m_value_mask[leaf_offset] = false;
 	return (1);
@@ -143,8 +146,7 @@ template <class Value, int Log2X, int Log2Y, int Log2Z>
 const Node<Value>	*Leaf_node<Value, Log2X, Log2Y, Log2Z>
 		::do_get_interresting_node(s_vec3i v, Value &value) const
 {
-	unsigned int	leaf_offset = ((v.x & (1 << sLog2X)-1) << (Log2Y + Log2Z))
-		+ ((v.y & (1 << sLog2Y)-1) << Log2Z) + (v.z & (1 << sLog2Z) - 1);
+	unsigned int	leaf_offset = get_leaf_offset(v.x, v.y, v.z);
 
 	if (m_value_mask[leaf_offset])
 		value = m_leaf_data[leaf_offset];

@@ -6,7 +6,7 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 20:38:22 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/17 15:04:32 by trobicho         ###   ########.fr       */
+/*   Updated: 2021/11/22 10:25:24 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ class Internal_node: public Node<Value>
 			sLog2Y = Log2Y + Child::sLog2Y,
 			sLog2Z = Log2Z + Child::sLog2Z,
 			sSize = 1 << (Log2X + Log2Y + Log2Z);
-	private:
+	protected:
 		inline bool			do_is_leaf() const {
 			return (false);
 		}
@@ -62,12 +62,20 @@ class Internal_node: public Node<Value>
 			s_vec3i	v;
 
 			uint32_t	x_of = (i >> (Log2Y + Log2Z));
-			uint32_t	y_of = (i >> (Log2Z)) & ((1 << Log2Y) - 1);
-			uint32_t	z_of = (i) & ((1 << Log2Z) - 1);
+			uint32_t	z_of = (i >> (Log2Y)) & ((1 << Log2Z) - 1);
+			uint32_t	y_of = (i) & ((1 << Log2Y) - 1);
 			v.x = m_x + (x_of << Child::sLog2X);
-			v.y = m_y + (y_of << Child::sLog2Y);
 			v.z = m_z + (z_of << Child::sLog2Z);
+			v.y = m_y + (y_of << Child::sLog2Y);
 			return (v);
+		}
+		inline unsigned int	get_internal_offset(int x, int y, int z) const
+		{
+			return (
+				(((x & (1 << sLog2X) - 1) >> Child::sLog2X) << (Log2Z + Log2Y))
+					+ (((y & (1 << sLog2Z) - 1) >> Child::sLog2Z) << Log2Y)
+					+ ((z & (1 << sLog2Y) - 1) >> Child::sLog2Y)
+			);
 		}
 
 		union u_internal_data 
@@ -117,10 +125,7 @@ template <class Value, class Child, int Log2X, int Log2Y, int Log2Z>
 void	Internal_node<Value, Child, Log2X, Log2Y, Log2Z>
 		::do_set_vox(Value value, int32_t x, int32_t y, int32_t z)
 {
-	unsigned int	internal_offset =
-		(((x & (1 << sLog2X) - 1) >> Child::sLog2X) << (Log2Y + Log2Z))
-		+ (((y & (1 << sLog2Y) - 1) >> Child::sLog2Y) << Log2Z)
-		+ ((z & (1 << sLog2Z) - 1) >> Child::sLog2Z);
+	unsigned int	internal_offset = get_internal_offset(x, y, z);
 
 	if (m_child_mask[internal_offset])
 		m_internal_data[internal_offset].child->set_vox(value, x, y, z);
@@ -139,10 +144,7 @@ template <class Value, class Child, int Log2X, int Log2Y, int Log2Z>
 void	Internal_node<Value, Child, Log2X, Log2Y, Log2Z>
 		::do_unset_vox(int32_t x, int32_t y, int32_t z)
 {
-	unsigned int	internal_offset =
-		(((x & (1 << sLog2X) - 1) >> Child::sLog2X) << (Log2Y + Log2Z))
-		+ (((y & (1 << sLog2Y) - 1) >> Child::sLog2Y) << Log2Z)
-		+ ((z & (1 << sLog2Z) - 1) >> Child::sLog2Z);
+	unsigned int	internal_offset = get_internal_offset(x, y, z);
 
 	if (m_child_mask[internal_offset])
 		m_internal_data[internal_offset].child->unset_vox(x, y, z);
@@ -163,10 +165,7 @@ template <class Value, class Child, int Log2X, int Log2Y, int Log2Z>
 Value	Internal_node<Value, Child, Log2X, Log2Y, Log2Z>
 	::do_get_vox(int32_t x, int32_t y, int32_t z) const
 {
-	unsigned int	internal_offset =
-		(((x & (1 << sLog2X) - 1) >> Child::sLog2X) << (Log2Y + Log2Z))
-		+ (((y & (1 << sLog2Y) - 1) >> Child::sLog2Y) << Log2Z)
-		+ ((z & (1 << sLog2Z) - 1) >> Child::sLog2Z);
+	unsigned int	internal_offset = get_internal_offset(x, y, z);
 
 	if (m_value_mask[internal_offset])
 		return (m_internal_data[internal_offset].value);
@@ -186,10 +185,8 @@ int		Internal_node<Value, Child, Log2X, Log2Y, Log2Z>
 		m_value_mask.reset();
 		return (sLog2X);
 	}
-	unsigned int	internal_offset =
-		(((node_pos.x & (1 << sLog2X) - 1) >> Child::sLog2X) << (Log2Y + Log2Z))
-		+ (((node_pos.y & (1 << sLog2Y) - 1) >> Child::sLog2Y) << Log2Z)
-		+ ((node_pos.z & (1 << sLog2Z) - 1) >> Child::sLog2Z);
+	unsigned int	internal_offset = get_internal_offset(
+		node_pos.x, node_pos.y, node_pos.z);
 
 	if (m_value_mask[internal_offset])
 	{
@@ -206,10 +203,7 @@ template <class Value, class Child, int Log2X, int Log2Y, int Log2Z>
 const Node<Value>	*Internal_node<Value, Child, Log2X, Log2Y, Log2Z>
 	::do_get_interresting_node(s_vec3i v, Value &value) const
 {
-	unsigned int	internal_offset =
-		(((v.x & (1 << sLog2X) - 1) >> Child::sLog2X) << (Log2Y + Log2Z))
-		+ (((v.y & (1 << sLog2Y) - 1) >> Child::sLog2Y) << Log2Z)
-		+ ((v.z & (1 << sLog2Z) - 1) >> Child::sLog2Z);
+	unsigned int	internal_offset = get_internal_offset(v.x, v.y, v.z);
 
 	if (m_value_mask[internal_offset])
 	{

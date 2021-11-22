@@ -6,7 +6,7 @@
 /*   By: trobicho <trobicho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/20 08:44:49 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/20 13:29:08 by trobicho         ###   ########.fr       */
+/*   Updated: 2021/11/22 09:22:16 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,16 @@ double	Map::combine_test(double x, double z)
 }
 */
 
-s_slice_info	Basic_terrain::do_get_slice_sample(
+s_slice_sample	Basic_terrain::do_get_slice_sample(
 	const Sampler &sampler, s_vec3i	pos)
 {
-	s_slice_info	slice_info;
+	s_slice_sample	slice_sample;
 	glm::vec3			pos_glm = pos.glm_vec3f();
 
-	slice_info.height = (int)get_height(sampler, pos_glm);
-	slice_info.water_height = WATER_HEIGHT;
-	get_biome_info(slice_info.biome_info, pos_glm);
-	return (slice_info);
+	slice_sample.height = (int)get_height(sampler, pos_glm);
+	slice_sample.water_height = WATER_HEIGHT;
+	get_biome_info(slice_sample.biome_info, pos_glm);
+	return (slice_sample);
 }
 
 double				Basic_terrain::get_height(const Sampler &sampler, glm::vec3 pos)
@@ -154,7 +154,7 @@ e_biome_type	Basic_terrain::get_biome_type(s_biome_info	&biome_info) const
 }
 
 Block_type		Basic_terrain::do_get_block(const Sampler &sampler
-	, s_slice_info &slice_info, s_vec3i pos) 
+	, s_slice_sample &slice_sample, s_vec3i pos) 
 {
 	Block_type		block_type = 1;
 	s_biome_info	biome_info;

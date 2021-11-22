@@ -6,7 +6,7 @@
 /*   By: trobicho <trobicho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 05:34:02 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/19 15:18:28 by trobicho         ###   ########.fr       */
+/*   Updated: 2021/11/22 12:58:57 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 class	Map_manager
 {
 	public:
-		Map_manager();
+		Map_manager(Map_sampler &map_sampler);
 		~Map_manager();
 
 		void		init();
@@ -36,6 +36,7 @@ class	Map_manager
 		void		quit() {m_state &= MAP_MANAGER_STATE_QUITING;}
 
 	private:
+		Map_sampler			&m_map_sampler;
 		Internal_L1			m_map_node;
 		Vdb_test				m_vdb;
 		Chunk_map				m_chunk_map;

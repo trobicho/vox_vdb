@@ -6,7 +6,7 @@
 /*   By: trobicho <trobicho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 06:32:34 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/19 15:45:32 by trobicho         ###   ########.fr       */
+/*   Updated: 2021/11/22 12:38:26 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "backend/vdb_tree/Vdb_test.h"
 #include "backend/utils.hpp"
 #include "backend/chunk_map/Chunk.hpp"
+#include "backend/front_interfaces/Map_sampler.hpp"
 
 #include <vector>
 #include <list>
@@ -54,7 +55,7 @@ using s_stats_thread = utils::thread::thread_wrapper<s_stats_type>;
 class	Chunk_manager
 {
 	public:
-		Chunk_manager(int nb_thread = 20);
+		Chunk_manager(Map_sampler &map_sampler, int nb_thread = 20);
 		~Chunk_manager();
 
 		void		lunch();
@@ -69,6 +70,7 @@ class	Chunk_manager
 		bool								m_quit = false;
 		//Chunk_generator			&m_mapper;
 
+		Map_sampler&				m_map_sampler;
 		std::thread					m_manager_thread;
 		s_chunk_event_list	m_chunk_event_list;
 		std::vector<s_stats_thread>

@@ -6,7 +6,7 @@
 /*   By: trobicho <trobicho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/20 08:22:11 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/20 13:26:15 by trobicho         ###   ########.fr       */
+/*   Updated: 2021/11/22 12:43:37 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,11 @@ class	Basic_terrain: public Map_sampler
 		}
 		Basic_terrain(){};
 
-		s_slice_info	do_get_slice_sample(const Sampler &sampler, s_vec3i pos);
-		Block_type		do_get_block(const Sampler &sampler
-				, s_slice_info &slice_info, s_vec3i pos);
-		glm::vec4			do_get_color_from_block_type(Block_type block) const;
-		bool					do_block_is_opaque(Block_type block) const
+		s_slice_sample	do_get_slice_sample(const Sampler &sampler, s_vec3i pos);
+		Block_type			do_get_block(const Sampler &sampler
+				, s_slice_sample &slice_sample, s_vec3i pos);
+		glm::vec4				do_get_color_from_block_type(Block_type block) const;
+		bool						do_block_is_opaque(Block_type block) const
 		{
 			switch ((e_block_type)block)
 			{

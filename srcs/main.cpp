@@ -6,11 +6,12 @@
 /*   By: trobicho <trobicho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 06:25:54 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/19 14:58:20 by trobicho         ###   ########.fr       */
+/*   Updated: 2021/11/22 12:58:10 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "backend/map_manager/Map_manager.hpp"
+#include "frontend/map_generator/Basic_terrain.hpp"
 #include "GLFW/glfw3.h"
 
 static void	main_loop(GLFWwindow *win)
@@ -23,7 +24,8 @@ static void	main_loop(GLFWwindow *win)
 
 int	main(int ac, char **av)
 {
-	Map_manager			map_manager;
+	Basic_terrain		basic_terrain;
+	Map_manager			map_manager(basic_terrain);
 
 	glfwInit();
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);

@@ -6,7 +6,7 @@
 /*   By: trobicho <trobicho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 06:32:36 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/19 16:10:42 by trobicho         ###   ########.fr       */
+/*   Updated: 2021/11/22 13:33:17 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 #include <chrono>
 #include <iostream>
 
-Chunk_manager::Chunk_manager(int nb_thread) : m_nb_thread(nb_thread)
+Chunk_manager::Chunk_manager(Map_sampler &map_sampler, int nb_thread) : 
+	m_map_sampler(map_sampler), m_nb_thread(nb_thread)
 {
 }
 
@@ -39,7 +40,19 @@ void	Chunk_manager::thread_chunk_event()
 		if (m_chunk_event_list.pop(&event))
 		{
 			std::cout << "chunk = (" << event.pos.x << ", " << event.pos.z << ")" << std::endl;
-			std::this_thread::sleep_for(std::chrono::milliseconds(500));
+			event.chunk->chunk_node->generate_one_chunk(m_map_sampler, event.pos);
+			for (int z = 0; z < 1 << 4; ++z)
+			{
+				for (int x = 0; x < 1 << 4; ++x)
+				{
+					event.chunk->height_buffer[x + z * (1 << 4)] =
+						m_map_sampler.get_slice_sample(Sampler(), s_vec3i(
+							event.pos.x + x
+							, 0	
+							, event.pos.z + z
+						)).height;
+				}
+			}
 		}
 		else
 			std::this_thread::sleep_for(std::chrono::milliseconds(100));

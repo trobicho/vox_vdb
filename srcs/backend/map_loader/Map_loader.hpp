@@ -6,7 +6,7 @@
 /*   By: trobicho <trobicho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/17 14:35:28 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/20 13:30:37 by trobicho         ###   ########.fr       */
+/*   Updated: 2021/11/22 13:42:27 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@
 class	Map_loader
 {
 	public:
-		Map_loader(Chunk_map &chunk_map): m_chunk_map(chunk_map){};
+		Map_loader(Chunk_map &chunk_map, Vdb_test &vdb):
+			m_chunk_map(chunk_map),	m_vdb(vdb){};
 		~Map_loader(){};
 
 		int			search_new_chunk(glm::vec3 player_pos);
@@ -38,8 +39,9 @@ class	Map_loader
 
 		Chunk_map						m_chunk_map;
 		s_chunk_event_list	*m_chunk_event_list = nullptr;
-		int									m_radius_generate = 20;
+		int									m_radius_generate = 5000;
 		int									m_radius_mesh = 10;
 		int									m_radius_unload = 30;
 		bool								m_update = true;
+		Vdb_test						&m_vdb;
 };

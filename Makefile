@@ -6,7 +6,7 @@
 #    By: trobicho <trobicho@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/16 09:03:40 by trobicho          #+#    #+#              #
-#    Updated: 2021/11/20 13:30:00 by trobicho         ###   ########.fr        #
+#    Updated: 2021/11/22 08:03:21 by trobicho         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,6 +53,7 @@ HDRS_NAME	=	backend/backend.hpp \
 						backend/vdb_tree/Root_node.h \
 						backend/vdb_tree/Internal_node.h \
 						backend/vdb_tree/Leaf_node.h \
+						backend/vdb_tree/Generate_node.hpp \
 						backend/front_interfaces/Map_sampler.hpp \
 						frontend/map_generator/Basic_terrain.cpp \
 						frontend/noise/Noise.h \
