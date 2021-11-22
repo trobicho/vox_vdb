@@ -6,7 +6,7 @@
 /*   By: trobicho <trobicho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 07:57:43 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/22 13:37:42 by trobicho         ###   ########.fr       */
+/*   Updated: 2021/11/22 17:08:59 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ Map_manager::Map_manager(Map_sampler &map_sampler):
 
 Map_manager::~Map_manager()
 {
+	m_state = MAP_MANAGER_STATE_QUITING;
+	m_manager_thread.join();
 }
 
 void	Map_manager::init()
@@ -32,6 +34,7 @@ void	Map_manager::init()
 	m_map_node = Internal_L1(0, 0, 0);
 	m_chunk_manager.lunch();
 	m_state = MAP_MANAGER_STATE_GENERATING;
+	m_manager_thread = std::thread(&Map_manager::lunch, this);  
 }
 
 void	Map_manager::lunch()
@@ -41,6 +44,38 @@ void	Map_manager::lunch()
 	while (m_state != MAP_MANAGER_STATE_QUITING)
 	{
 		m_map_loader.search_new_chunk(player_pos);
+		//------------------------
+		{
+			std::lock_guard<std::mutex> guard(m_mutex_screen);
+			s_vec3i	chunk_pos;
+			s_vec3i	pos;
+			for (int y = 0; y < 1080 / 16; ++y)
+			{
+				pos.z = (int)player_pos.z - 1080 / 2 + y * 16;
+				for (int x = 0; x < 1920 / 16; ++x)
+				{
+					pos.x = (int)player_pos.x - 1920 / 2 + x * 16;
+					s_vec3i	chunk_pos(
+						(pos.x >> 4) << 4
+						, 0
+						, (pos.z >> 4) << 4
+					);
+					auto new_chunk = m_chunk_map.find(std::make_pair(chunk_pos.x, chunk_pos.z));
+					if (new_chunk != m_chunk_map.end())// && new_chunk->second.loaded)
+					{
+						Chunk	&chunk = new_chunk->second;
+						for (int cz = 0; cz < 1 << 4; ++cz)
+						{
+							for (int cx = 0; cx < 1 << 4; ++cx)
+							{
+								m_screen[x * 16  + cx + (y * 16 + cz) * 1920] = (unsigned char)chunk.height_buffer[cx + cz * 16];
+							}
+						}
+					}
+				}
+			}
+		}
+		//------------------------
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
 	m_chunk_manager.quit();

@@ -6,7 +6,7 @@
 /*   By: trobicho <trobicho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 06:32:36 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/22 13:33:17 by trobicho         ###   ########.fr       */
+/*   Updated: 2021/11/22 14:40:32 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void	Chunk_manager::thread_chunk_event()
 						)).height;
 				}
 			}
+			event.chunk->loaded = true;
 		}
 		else
 			std::this_thread::sleep_for(std::chrono::milliseconds(100));

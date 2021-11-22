@@ -6,7 +6,7 @@
 #    By: trobicho <trobicho@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/16 09:03:40 by trobicho          #+#    #+#              #
-#    Updated: 2021/11/22 08:03:21 by trobicho         ###   ########.fr        #
+#    Updated: 2021/11/22 15:55:08 by trobicho         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,7 @@ else
 		-lvulkan -lglfw -lm -L -ltrl
 endif
 
-SRCS_NAME	=	main.cpp \
+SRCS_NAME	=	main_glfw.cpp \
 						backend/map_manager/Map_manager.cpp \
 						backend/map_loader/Map_loader.cpp \
 						backend/chunk_manager/Chunk_manager.cpp \
