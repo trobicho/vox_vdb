@@ -6,7 +6,7 @@
 /*   By: trobicho <trobicho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 06:25:54 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/22 16:40:28 by trobicho         ###   ########.fr       */
+/*   Updated: 2021/11/22 19:22:55 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ void key_callback(GLFWwindow* win, int key, int scancode, int action, int mods)
 	{
 		std::cout << "print image" << std::endl;
 		std::mutex mutex;
-		unsigned char* pixels = map_manager->get_screen(&mutex);
+		uint32_t* pixels = map_manager->get_screen(&mutex);
 		std::lock_guard<std::mutex> guard(mutex);
-		stbi_write_png("./height_map.png", 1920, 1080, 1, pixels, 1920);
+		stbi_write_png("./height_map.png", 1920, 1080, 4, pixels, 1920);
 	}
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 	{
@@ -46,13 +46,14 @@ void key_callback(GLFWwindow* win, int key, int scancode, int action, int mods)
 
 int	main(int ac, char **av)
 {
-	Basic_terrain		basic_terrain;
-	Map_manager			map_manager(basic_terrain);
-
 	glfwInit();
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 	GLFWwindow *win = glfwCreateWindow(1920, 1080, "Vox_vdb", NULL, NULL);
+
+	Basic_terrain		basic_terrain;
+	Map_manager			map_manager(basic_terrain);
+
 	glfwSetWindowUserPointer(win, &map_manager);
 	map_manager.init();
 

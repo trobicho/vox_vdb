@@ -6,7 +6,7 @@
 /*   By: trobicho <trobicho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/20 08:22:11 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/22 12:43:37 by trobicho         ###   ########.fr       */
+/*   Updated: 2021/11/22 18:25:09 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ enum	e_block_type
 {
 	bl_air = 0,
 	bl_stone = 1,
+	bl_water = 2,
 	bl_bedrock,
 	bl_dirt,
-	bl_water,
 	bl_grass,
 	bl_ice,
 	bl_sand,

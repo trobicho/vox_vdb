@@ -6,7 +6,7 @@
 /*   By: trobicho <trobicho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/17 15:07:04 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/22 11:33:35 by trobicho         ###   ########.fr       */
+/*   Updated: 2021/11/22 18:38:30 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,29 @@ void	Generate_chunk_node<Value, Child, Log2X, Log2Y, Log2Z>
 		{
 			pos.z = chunk.z + z;
 			s_slice_sample sample = map_sampler.get_slice_sample(sampler, pos);
+			int height = (sample.height > sample.water_height)
+				? sample.height : sample.water_height;
+			for (int y = 0; y < (height  & ((1 << Log2Y) - 1)); ++y)
+			{
+				pos.y = chunk.y + y;
+				uint32_t value = 2;
+				if (y > sample.height)
+					value = map_sampler.get_block(sampler, sample, pos);
+				uint32_t internal_offset =
+					x << (Log2Z  + Log2Y)
+					+ z << Log2Y
+					+ y;
+				if (!this->m_child_mask[internal_offset])
+				{
+					this->m_internal_data[internal_offset].child = new Child(
+						(x >> Child::sLog2X) << Child::sLog2X
+						, (y >> Child::sLog2Y) << Child::sLog2Y
+						, (z >> Child::sLog2Z) << Child::sLog2Z);
+					this->m_child_mask.set(internal_offset);
+				}
+				this->m_internal_data[internal_offset].child
+					->set_vox(value, pos.x, pos.y, pos.z);
+			}
 		}
 	}
 }

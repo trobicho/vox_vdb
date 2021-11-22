@@ -6,7 +6,7 @@
 /*   By: trobicho <trobicho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 07:57:43 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/22 17:08:59 by trobicho         ###   ########.fr       */
+/*   Updated: 2021/11/22 19:03:57 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,12 @@ void	Map_manager::lunch()
 						{
 							for (int cx = 0; cx < 1 << 4; ++cx)
 							{
-								m_screen[x * 16  + cx + (y * 16 + cz) * 1920] = (unsigned char)chunk.height_buffer[cx + cz * 16];
+								uint32_t	color =
+									chunk.surface_buffer[cx + cz * 16].block.x * (256 << 3)
+									+ chunk.surface_buffer[cx + cz * 16].block.y * (256 << 2)
+									+ chunk.surface_buffer[cx + cz * 16].block.z * 256;
+									+ chunk.surface_buffer[cx + cz * 16].block.w;
+								m_screen[x * 16  + cx + (y * 16 + cz) * 1920] = color;
 							}
 						}
 					}
