@@ -6,7 +6,7 @@
 /*   By: trobicho <trobicho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/17 14:35:28 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/22 17:22:07 by trobicho         ###   ########.fr       */
+/*   Updated: 2021/11/29 21:03:52 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ class	Map_loader
 
 		Chunk_map						&m_chunk_map;
 		s_chunk_event_list	*m_chunk_event_list = nullptr;
-		int									m_radius_generate = 80;
+		int									m_radius_generate = 30;
 		int									m_radius_mesh = 10;
 		int									m_radius_unload = 30;
 		bool								m_update = true;

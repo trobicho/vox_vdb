@@ -6,7 +6,7 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 20:38:22 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/22 10:25:24 by trobicho         ###   ########.fr       */
+/*   Updated: 2021/11/28 12:11:55 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ class Internal_node: public Node<Value>
 		{
 			return (
 				(((x & (1 << sLog2X) - 1) >> Child::sLog2X) << (Log2Z + Log2Y))
-					+ (((y & (1 << sLog2Z) - 1) >> Child::sLog2Z) << Log2Y)
-					+ ((z & (1 << sLog2Y) - 1) >> Child::sLog2Y)
+					+ (((z & (1 << sLog2Z) - 1) >> Child::sLog2Z) << Log2Y)
+					+ ((y & (1 << sLog2Y) - 1) >> Child::sLog2Y)
 			);
 		}
 

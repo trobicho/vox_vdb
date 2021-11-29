@@ -6,7 +6,7 @@
 /*   By: trobicho <trobicho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 07:57:43 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/22 19:03:57 by trobicho         ###   ########.fr       */
+/*   Updated: 2021/11/29 23:07:57 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	Map_manager::init()
 void	Map_manager::lunch()
 {
 	m_state |= MAP_MANAGER_STATE_WORKING;
-	glm::vec3		player_pos(15000.0f, 0.0f, 15000.0f);
+	glm::vec3		player_pos(1300.0f, 0.0f, 1300.0f);
 	while (m_state != MAP_MANAGER_STATE_QUITING)
 	{
 		m_map_loader.search_new_chunk(player_pos);
@@ -49,12 +49,12 @@ void	Map_manager::lunch()
 			std::lock_guard<std::mutex> guard(m_mutex_screen);
 			s_vec3i	chunk_pos;
 			s_vec3i	pos;
-			for (int y = 0; y < 1080 / 16; ++y)
+			for (int y = 0; y < 720 / 16; ++y)
 			{
-				pos.z = (int)player_pos.z - 1080 / 2 + y * 16;
-				for (int x = 0; x < 1920 / 16; ++x)
+				pos.z = (int)player_pos.z - 720 / 2 + y * 16;
+				for (int x = 0; x < 1280 / 16; ++x)
 				{
-					pos.x = (int)player_pos.x - 1920 / 2 + x * 16;
+					pos.x = (int)player_pos.x - 1280 / 2 + x * 16;
 					s_vec3i	chunk_pos(
 						(pos.x >> 4) << 4
 						, 0
@@ -68,12 +68,18 @@ void	Map_manager::lunch()
 						{
 							for (int cx = 0; cx < 1 << 4; ++cx)
 							{
+								uint32_t	r, g, b, a;
+								r = ((uint32_t)(chunk.surface_buffer[cx + cz * 16].block.x * (255)));
+								g = ((uint32_t)(chunk.surface_buffer[cx + cz * 16].block.y * (255)));
+								b = ((uint32_t)(chunk.surface_buffer[cx + cz * 16].block.z * (255)));
+								a = ((uint32_t)(chunk.surface_buffer[cx + cz * 16].block.w * (255)));
+
 								uint32_t	color =
-									chunk.surface_buffer[cx + cz * 16].block.x * (256 << 3)
-									+ chunk.surface_buffer[cx + cz * 16].block.y * (256 << 2)
-									+ chunk.surface_buffer[cx + cz * 16].block.z * 256;
-									+ chunk.surface_buffer[cx + cz * 16].block.w;
-								m_screen[x * 16  + cx + (y * 16 + cz) * 1920] = color;
+									+ (a & 255) * (1 << 24)
+									+ (b & 255) * (1 << 16)
+									+ (g & 255) * (1 << 8)
+									+ r;
+								m_screen[x * 16  + cx + (y * 16 + cz) * 1280] = color;
 							}
 						}
 					}

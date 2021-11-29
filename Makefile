@@ -6,12 +6,12 @@
 #    By: trobicho <trobicho@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/16 09:03:40 by trobicho          #+#    #+#              #
-#    Updated: 2021/11/22 19:12:32 by trobicho         ###   ########.fr        #
+#    Updated: 2021/11/29 18:36:46 by trobicho         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC 				= g++
-CXXFLAGS	= -std=c++14 -g
+CXXFLAGS	= -std=c++14 -g -Og
 NAME			= vox_vdb
 
 SRCS_PATH			= ./srcs
@@ -24,6 +24,7 @@ ifeq ($(UNAME), Linux)
 		-I$(GLFW3_PATH)/include -I$(GLM_PATH)/include \
 		-I$(INCLUDE_PATH)
 	LDFLAGS = -L$(VULKAN_SDK)/lib `pkg-config --static --libs glfw3` -lvulkan -lm -L ../my_lib_cpp/ -ltrl
+	#LDFLAGS = -lm -L ../my_lib_cpp/ -ltrl -lpthread
 else 
 	INCS_FLAGS	= -I$(VULKAN_SDK)/include \
 		-I$(GLFW3_PATH)/include -I$(GLM_PATH)/include \

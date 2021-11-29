@@ -6,7 +6,7 @@
 /*   By: trobicho <trobicho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 06:32:36 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/22 19:10:34 by trobicho         ###   ########.fr       */
+/*   Updated: 2021/11/29 21:01:33 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,21 @@ void	Chunk_manager::thread_chunk_event()
 					));
 					uint32_t height = (sample.height > sample.water_height)
 							? sample.height : sample.water_height;
-					event.chunk->surface_buffer[x + z * (1 << 4)].height = height;
-					event.chunk->surface_buffer[x + z * (1 << 4)].block = 
-						m_map_sampler.get_color_from_block_type(
-							chunk_node->get_vox(event.pos.x + x, height - 1, event.pos.z + z)
+					int y = 0;
+					event.chunk->surface_buffer[x + z * (1 << 4)].generated_height = height;
+					for (y = height - 1; y >= 0; --y)
+					{
+						event.chunk->surface_buffer[x + z * (1 << 4)].height = y + 1;
+						glm::vec4 color = m_map_sampler.get_color_from_block_type(
+							chunk_node->get_vox(event.pos.x + x, y, event.pos.z + z)
 						);
+						float alpha = color.w;
+						color *= (float)((y / 128.0f) > 1.0f ? 1.0f : (y / 128.0f));
+						color.w = alpha;
+						event.chunk->surface_buffer[x + z * (1 << 4)].block = color;
+						if (color.w >= 0.3)
+							break;
+					}
 				}
 			}
 			event.chunk->loaded = true;

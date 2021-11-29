@@ -6,7 +6,7 @@
 /*   By: trobicho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/02 21:06:37 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/22 19:21:08 by trobicho         ###   ########.fr       */
+/*   Updated: 2021/11/29 20:55:47 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 using	Leaf = Leaf_node<uint32_t, 2>;
 using	Chunk_part_node = Internal_node<uint32_t, Leaf, 2, 2, 2>;
 using	Chunk_node = Generate_chunk_node<uint32_t, Chunk_part_node, 0, 4, 0>;
-using	Internal_L2 = Generate_pre_chunk_node<uint32_t, Chunk_node , 5, 1, 5>;
-using	Internal_L1 = Generate_pre_chunk_node<uint32_t, Internal_L2, 6, 1, 6>;
+using	Internal_L2 = Generate_pre_chunk_node<uint32_t, Chunk_node , 5, 0, 5>;
+using	Internal_L1 = Generate_pre_chunk_node<uint32_t, Internal_L2, 2, 0, 2>;
 using	Node_v = Node<uint32_t>;
 
 class	Vdb_test

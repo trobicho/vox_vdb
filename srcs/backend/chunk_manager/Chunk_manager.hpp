@@ -6,7 +6,7 @@
 /*   By: trobicho <trobicho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 06:32:34 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/22 12:38:26 by trobicho         ###   ########.fr       */
+/*   Updated: 2021/11/29 18:22:04 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ using s_stats_thread = utils::thread::thread_wrapper<s_stats_type>;
 class	Chunk_manager
 {
 	public:
-		Chunk_manager(Map_sampler &map_sampler, int nb_thread = 20);
+		Chunk_manager(Map_sampler &map_sampler, int nb_thread = 10);
 		~Chunk_manager();
 
 		void		lunch();

@@ -6,7 +6,7 @@
 /*   By: trobicho <trobicho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/17 14:35:33 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/22 12:18:54 by trobicho         ###   ########.fr       */
+/*   Updated: 2021/11/29 21:02:02 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ int		Map_loader::search_new_chunk(glm::vec3 player_pos)
 			});
 			auto new_chunk = m_chunk_map.find(std::make_pair(chunk_pos.x, chunk_pos.z));
 			std::cout << "chunk_in_radius: {" 
-				<< pos.x << ", " << pos.z << "}" << std::endl;
+				<< chunk_pos.x << ", " << chunk_pos.z << "}" << std::endl;
 			m_chunk_event_list->push(s_chunk_update_event(
-				pos
+				chunk_pos
 				, &new_chunk->second
 				, CHUNK_UPDATE_EVENT_GENERATE
 			));

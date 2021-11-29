@@ -6,7 +6,7 @@
 /*   By: trobicho <trobicho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 05:34:02 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/22 19:05:07 by trobicho         ###   ########.fr       */
+/*   Updated: 2021/11/29 23:07:45 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ class	Map_manager
 		void		lunch();
 		void		quit() {m_state &= MAP_MANAGER_STATE_QUITING;}
 	
-		uint32_t*	get_screen(std::mutex *mutex){
-			mutex = &m_mutex_screen;
-			return (m_screen);
+		std::mutex&	get_screen(uint32_t **screen){
+			*screen = m_screen;
+			return (m_mutex_screen);
 		}
 
 	private:
@@ -50,7 +50,7 @@ class	Map_manager
 		Chunk_manager		m_chunk_manager;
 		Map_loader			m_map_loader;
 
-		uint32_t				m_screen[1920 * 1080];
+		uint32_t				m_screen[1280 * 720];
 		std::mutex			m_mutex_screen;
 
 		uint32_t				m_state;

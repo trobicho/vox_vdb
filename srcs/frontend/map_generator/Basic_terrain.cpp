@@ -6,11 +6,12 @@
 /*   By: trobicho <trobicho@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/20 08:44:49 by trobicho          #+#    #+#             */
-/*   Updated: 2021/11/22 09:22:16 by trobicho         ###   ########.fr       */
+/*   Updated: 2021/11/29 15:39:43 by trobicho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Basic_terrain.hpp"
+#include <iostream>
 
 /*
 double	Map::combine_test(double x, double z)
@@ -71,6 +72,7 @@ double				Basic_terrain::get_height(const Sampler &sampler, glm::vec3 pos)
 	double	height = (d_e * WATER_HEIGHT)
 					+ (d_h * (CLOUD_HEIGHT - WATER_HEIGHT)) + 1.0;
 	return (height);
+	//return (120);
 }
 
 double		Basic_terrain::get_density_cave(glm::vec3 pos)
@@ -110,7 +112,7 @@ uint32_t		Basic_terrain::get_block_type(s_biome_info &biome_info, int y) const
 	if (biome_type == bt_grassland
 		|| biome_type == bt_shrubland || biome_type == bt_savanna)
 		return (bl_sand);
-	return (bl_dirt);
+	return (bl_stone);
 }
 
 e_biome_type	Basic_terrain::get_biome_type(s_biome_info	&biome_info) const
@@ -173,6 +175,9 @@ glm::vec4			Basic_terrain::do_get_color_from_block_type(Block_type block) const
 {
 	switch ((e_block_type)block)
 	{
+		case 0:
+			return (glm::vec4(0.0f, 0.0f, 0.0f, 0.0f));
+			break;
 		case bl_stone:
 			return (glm::vec4(0.35f, 0.35f, 0.35f, 1.0f));
 			break;
@@ -201,7 +206,7 @@ glm::vec4			Basic_terrain::do_get_color_from_block_type(Block_type block) const
 			return (glm::vec4(0.1f, 0.8f, 0.1f, 1.0f));
 			break;
 		default:
-			return (glm::vec4(0.7f, 0.1f, 0.1f, 1.0f));
+			return (glm::vec4(0.7f, 0.1f, 1.0f, 1.0f));
 			break;
 	}
 }
